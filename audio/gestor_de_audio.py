@@ -13,8 +13,9 @@ def reproducir_musica(ruta, loop=True):
         cantidad_reproducciones = -1
     else:
         cantidad_reproducciones = 0
-
     pygame.mixer.music.play(cantidad_reproducciones)
+    cambiar_volumen(0.1)
+
 
 def detener_musica():
     pygame.mixer.music.stop()

@@ -1,6 +1,8 @@
 import random
 from logica_juego.datos import cartas
-from logica_juego.constantes import *
+from datos.constantes import ANCHO, ALTO, COLOR_TEXTO_CLARO, COLOR_SECUNDARIO, ITERACION_DADOS, INICIO_CARAS, FIN_CARAS
+import pygame
+from renderizado.render_elementos import fondo_juego, crear_button_rect
 
 def mostrar_menu():
     print("\n==========Mini generala==========\n")
@@ -86,6 +88,114 @@ def mostrar_planilla(planilla):
     print("\n----- Planilla de puntajes ------")
     for categoria, valor in planilla.items():
         print(f"{categoria}: {valor}")
+
+def crear_estado_juego(num_dados, max_intentos=3):
+
+    return {
+        "num_dados": num_dados,
+        "max_intentos": max_intentos,
+        "dados": [0] * num_dados,
+        "locked": [False] * num_dados,
+        "intento": 0
+    }
+
+def reset_juego(estado):
+    estado["dados"] = [0] * estado["num_dados"]
+    estado["locked"] = [False] * estado["num_dados"]
+    estado["intento"] = 0
+
+def tirar(estado):
+    if estado["intento"] >= estado["max_intentos"]:
+        return False
+    
+    for i in range(estado["num_dados"]):
+        if not estado["locked"][i]:
+            estado["dados"][i] = random.randint(1, 6)
+    
+    estado["intento"] += 1
+    return True
+
+def cartas_de_dados(estado):
+    resultado = []
+    for i in estado["dados"]:  
+        if 1 <= i <= len(cartas):
+            resultado.append(cartas[i-1]) 
+        else:
+            resultado.append(None) 
+    return resultado
+
+def toggle_lock(estado, idx):
+    if 0 <= idx < estado["num_dados"] and estado["intento"] > 0:
+        estado["locked"][idx] = not estado["locked"][idx]
+
+def pantalla_jugar(pantalla, estado_juego):
+    """
+    Dibuja la pantalla de juego. Devuelve lista de botones {'accion','rect'}.
+    """
+    botones = []
+
+    pantalla.fill((30, 30, 30))
+
+    fuente_titulo = pygame.font.Font(None, 36)
+    txt = fuente_titulo.render("Partida - Generala LOL", True, COLOR_TEXTO_CLARO)
+    pantalla.blit(txt, ((ANCHO - txt.get_width()) // 2, 10))
+
+    dados = estado_juego["dados"]
+    locked = estado_juego["locked"]
+    intento = estado_juego["intento"]
+
+    DADO_W, DADO_H = 100, 120
+    espacio = 15
+    total_w = DADO_W * len(dados) + espacio * (len(dados) - 1)
+    start_x = (ANCHO - total_w) // 2
+    y = 80
+
+    fuente_num = pygame.font.Font(None, 44)
+    fuente_nombre = pygame.font.Font(None, 16)
+
+    cartas_info = cartas_de_dados(estado_juego)
+
+    for i, val in enumerate(dados):
+        x = start_x + i * (DADO_W + espacio)
+        rect = pygame.Rect(x, y, DADO_W, DADO_H)
+        
+        pygame.draw.rect(pantalla, (0, 0, 0), rect, border_radius=8)
+        inner = rect.inflate(-6, -6)
+        
+        color_fondo = (200, 200, 200) if not locked[i] else (160, 120, 120)
+        pygame.draw.rect(pantalla, color_fondo, inner, border_radius=8)
+
+        num_text = fuente_num.render(str(val) if val else "-", True, (10, 10, 10))
+        pantalla.blit(num_text, (inner.x + (inner.width - num_text.get_width()) // 2, 
+                                 inner.y + (inner.height // 2 - num_text.get_height() // 2)))
+
+        if cartas_info[i]:
+            nombre = cartas_info[i]["nombre"]
+            imagen_path = cartas_info[i].get("imagen", None)
+            
+            if imagen_path:
+                imagen = pygame.image.load(imagen_path)
+                imagen = pygame.transform.scale(imagen, (DADO_W - 12, 60))
+                pantalla.blit(imagen, (inner.x + 3, inner.y + 30))
+            else:
+                nombre_txt = fuente_nombre.render(nombre, True, (10, 10, 10))
+                pantalla.blit(nombre_txt, (inner.x + (inner.width - nombre_txt.get_width()) // 2, ))
+        botones.append({"accion": f"lock_{i}", "rect": rect})
+
+    BTN_W, BTN_H = 120, 40
+    gap = 16
+    bx = (ANCHO - (BTN_W * 3 + gap * 2)) // 2
+    by = y + DADO_H + 40
+
+    rect_tirar = crear_button_rect(pantalla, bx, by, BTN_W, BTN_H, botones.append({"accion": "tirar", "rect": rect_tirar}))
+
+    rect_guardar = crear_button_rect(pantalla, bx + (BTN_W + gap), by, BTN_W, BTN_H, "Guardar",    botones.append({"accion": "guardar", "rect": rect_guardar}))
+
+    rect_volver = crear_button_rect(pantalla, bx + 2 * (BTN_W + gap), by, BTN_W, BTN_H, "Volver",
+                                    COLOR_SECUNDARIO, COLOR_TEXTO_CLARO, tamano_fuente=20)
+    botones.append({"accion": "volver", "rect": rect_volver})
+
+    return botones
 
 def jugar():
     print("\n==========NUEVA PARTIDA==========\n")

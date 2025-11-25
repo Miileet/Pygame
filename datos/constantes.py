@@ -11,3 +11,6 @@ COLOR_SECUNDARIO =  datos["config"]["colores"]["primario"]
 VOLUMEN = datos["config"]["audio"]["volumen"]
 ETIQUETAS = ["Jugar", "Opciones", "Creditos", "Stats", "Salir"]
 KEYS = ["jugar", "opciones", "creditos", "stats", "salir"]
+ITERACION_DADOS = 5
+INICIO_CARAS = 1
+FIN_CARAS = 10
