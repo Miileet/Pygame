@@ -1,0 +1,95 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+
+# Installer / build artifacts
+build/
+dist/
+*.egg-info/
+pip-wheel-metadata/
+
+# Editor/IDE files
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# OS files
+.DS_Store
+Thumbs.db
+
+
+# Caches
+.mypy_cache/
+.cache/
+
+
+
+
+
+# Compiled assets / temporary files
+*.tmp
+*.bak
+*.swp
+*.swo
+```# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+
+# Installer / build artifacts
+build/
+dist/
+*.egg-info/
+pip-wheel-metadata/
+
+# Editor/IDE files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python testing / coverage
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Caches
+.mypy_cache/
+.cache/
+
+# Local env / secrets
+.env
+*.env
+
+
+
+
+# Compiled assets / temporary files
+*.tmp
+*.bak
+*.swp
+*.swo

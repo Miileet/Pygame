@@ -1,0 +1,23 @@
+{
+    "config": {
+        "ventana": {
+            "ancho": 1000,
+            "alto": 600,
+            "titulo": "Generala LOL"
+        },
+        "audio": {
+            "volumen": 0.7
+        },
+        "colores": {
+            "fondo": [
+                5,
+                1,
+                87
+            ],
+            "primario": [113, 0, 255],
+            "secundario": [252, 96, 248],
+            "texto_claro": [255, 255, 255],
+            "texto_oscuro": [0, 0, 0]
+        }
+    }
+}
